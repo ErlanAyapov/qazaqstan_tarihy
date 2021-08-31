@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Қазақстан тарихы!</title>
+	<link rel="stylesheet" type="text/css" href="style/style.css">
+	<link rel="icon" type="image/png" href="icon.png">
+	<script type="text/javascript" src="/eel.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<p style="font-size: 18px; color:yellow;"></p>
+	<div class="container">
+		<div class="header">
+			<p>Қазақстан тарихы</p>
+		</div>
+		<div class="question" id="question">
+			Сынақты бастау үшін алға батырмасын басыңыз
+		</div>
+		<div class="input">
+			<textarea rows="5" type="text" name="input" placeholder="Жауап жаз" id="user_answer"></textarea>
+		</div>
+		<br>
+		<button id="next" value="next">Алға</button>
+		<button id="reload" value="reload">Жаңарту</button>
+	</div>
+
+	<div class="result-inner">
+		<div class="result">
+			<div id="res">+0 | -0 | 0</div>
+			<div style="display:none;" class="result-content">
+				<h1>Қате сұрақтар!</h1>
+				<div id="result">Сіз әлі тапсырмадыңыз!</div>
+			</div>
+			<button id="back">Артқа</button>
+			<div class="product">Product by: Erlan Ayapov</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		async function qazaqstan_history(next) {
+			var user_answer = document.getElementById('user_answer').value;
+			// var next = document.getElementById('next').value;
+			var res = await eel.qazaqstan_history(next, user_answer)();
+			document.getElementById('question').innerHTML = res;	
+		}
+
+		async function check_return_result() {
+			var return_result = await eel.return_result()();
+			document.getElementById('res').innerHTML = return_result;	
+		}
+		async function check_false_anwsers() {
+			var false_anwer = await eel.view_false_answer()();
+			document.getElementById('result').innerHTML = false_anwer;	
+		}
+
+		async function restart_answers() {
+			await eel.reload_progress()();
+		}
+
+		jQuery('#next').on('click', function($) {
+			var next = 'next';
+			qazaqstan_history(next);
+			check_return_result();
+			document.getElementById('user_answer').value = '';
+		});
+
+		jQuery('#reload').on('click', function($) {
+			restart_answers();
+			var next = 'next';
+			qazaqstan_history(next);
+			check_return_result();
+			document.getElementById('user_answer').value = '';
+		});
+
+		jQuery('#res').on('click', function() {
+			
+			$(".result-inner").css("position","unset")
+			$(".result-inner").css("width","100%")
+			$("#res").css("display","none")
+			$(".container").css("display","none")
+			$(".result-content").css("display","block")
+			$("#back").css("display","block")
+			$(".product").css("display","block")
+			check_false_anwsers();
+
+		});
+
+		jQuery('#back').on('click', function() {
+			$(".container").css("display","block")
+			$("#res").css("display","block")
+			$(".result-content").css("display","none")
+			$(".result-inner").css("position","absolute")
+			$(".result-inner").css("width","auto")
+			$("#back").css("display","none")
+			$(".product").css("display","none")
+		});
+	</script>
+	
+</body>
+</html>
